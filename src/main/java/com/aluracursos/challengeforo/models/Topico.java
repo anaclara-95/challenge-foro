@@ -1,14 +1,14 @@
 package com.aluracursos.challengeforo.models;
 
 
+import com.aluracursos.challengeforo.dto.DatosActualizarTopico;
+import com.aluracursos.challengeforo.dto.DatosRegistroTopico;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Table(name= "topicos")
 @Entity(name="Topico")
@@ -24,6 +24,7 @@ public class Topico {
     private String mensaje;
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion = LocalDateTime.now();
+    @Setter
     @Enumerated(EnumType.STRING)
     private Estado estado = Estado.NO_RESPONDIDO;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -42,4 +43,36 @@ public class Topico {
         this.autor = autor;
         this.curso = curso;
     }
+
+    public void actualizarDatos(DatosActualizarTopico datosActualizar, Usuario autor, Curso curso) {
+        if (datosActualizar.titulo() != null) {
+            this.titulo = datosActualizar.titulo();
+        }
+        if (datosActualizar.mensaje() != null) {
+            this.mensaje = datosActualizar.mensaje();
+        }
+        if (datosActualizar.estado() != datosActualizar.estado()) {
+            this.estado = datosActualizar.estado();
+        }
+        if (autor != null) {
+            this.autor = autor;
+        }
+        if (curso != null) {
+            this.curso = curso;
+        }
+    }
+
+    public void agregarRespuesta(Respuesta respuesta) {
+        this.respuestas.add(respuesta);
+        if (respuesta.getSolucion()) {
+            this.estado = Estado.SOLUCIONADO;
+        } else {
+            this.estado = Estado.NO_SOLUCIONADO;
+        }
+    }
+
+    public void cerrarTopico() {
+        this.estado = Estado.CERRADO;
+    }
+
 }

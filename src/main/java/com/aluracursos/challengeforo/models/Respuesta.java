@@ -1,5 +1,7 @@
 package com.aluracursos.challengeforo.models;
 
+import com.aluracursos.challengeforo.dto.DatosActualizarRespuesta;
+import com.aluracursos.challengeforo.dto.DatosRegistroRespuesta;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -38,6 +40,21 @@ public class Respuesta {
             this.topico.setEstado(Estado.SOLUCIONADO);
         } else {
             this.topico.setEstado(Estado.NO_SOLUCIONADO);
+        }
+    }
+
+    public void actualizarDatos(DatosActualizarRespuesta datosActualizar, Topico topico, Usuario autor) {
+        if (datosActualizar.mensaje() != null) {
+            this.mensaje = datosActualizar.mensaje();
+        }
+        if (topico != null) {
+            this.topico = topico;
+        }
+        if (autor != null) {
+            this.autor = autor;
+        }
+        if (datosActualizar.solucion() != this.solucion) {
+            this.solucion = datosActualizar.solucion();
         }
     }
 }

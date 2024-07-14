@@ -1,10 +1,15 @@
 package com.aluracursos.challengeforo.controller;
 
+import com.aluracursos.challengeforo.dto.*;
 import com.aluracursos.challengeforo.models.Curso;
 import com.aluracursos.challengeforo.models.Topico;
 import com.aluracursos.challengeforo.models.Usuario;
+import com.aluracursos.challengeforo.repository.CursoRepository;
+import com.aluracursos.challengeforo.repository.TopicoRepository;
+import com.aluracursos.challengeforo.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
