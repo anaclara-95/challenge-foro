@@ -9,18 +9,21 @@ import com.aluracursos.challengeforo.repository.TopicoRepository;
 import com.aluracursos.challengeforo.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.awt.print.Pageable;
 import java.net.URI;
 
 @RestController
 @RequestMapping("/topicos")
 public class TopicoController {
+
+    @Autowired
     private final TopicoRepository topicoRepository;
     private final UsuarioRepository usuarioRepository;
     private final CursoRepository cursoRepository;
@@ -31,17 +34,18 @@ public class TopicoController {
         this.cursoRepository = cursoRepository;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<DatosRespuestaTopico> registrar(@RequestBody @Valid DatosRegistroTopico datosRegistro, UriComponentsBuilder uri) {
         Usuario autor = usuarioRepository.getReferenceById(datosRegistro.autorId());
         Curso curso = cursoRepository.getReferenceById(datosRegistro.cursoId());
         Topico topico = topicoRepository.save(new Topico(datosRegistro, autor, curso));
         DatosRespuestaTopico datosRespuesta = new DatosRespuestaTopico(topico);
-        URI url = uri.path("/topicos/{id}").buildAndExpand(topico.getId()).toUri();
+
+        URI url = uri.path("/{id}").buildAndExpand(topico.getId()).toUri();
         return ResponseEntity.created(url).body(datosRespuesta);
     }
 
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<Page<DatosListadoTopico>> listar(@PageableDefault(size = 10) Pageable paginacion) {
         return ResponseEntity.ok(topicoRepository.findAll(paginacion).map(DatosListadoTopico::new));
     }
@@ -52,7 +56,7 @@ public class TopicoController {
         return ResponseEntity.ok(new DatosRespuestaTopicoId(topico));
     }
 
-    @PutMapping
+    @PutMapping("/update/{id}")
     @Transactional
     public ResponseEntity<DatosRespuestaTopico> actualizar(@RequestBody @Valid DatosActualizarTopico datosActualizar) {
         Usuario autor = usuarioRepository.getReferenceById(datosActualizar.autorId());
@@ -62,7 +66,7 @@ public class TopicoController {
         return ResponseEntity.ok( new DatosRespuestaTopico(topico));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     @Transactional
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         Topico topico = topicoRepository.getReferenceById(id);

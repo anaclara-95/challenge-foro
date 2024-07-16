@@ -2,27 +2,26 @@ package com.aluracursos.challengeforo.models;
 
 import com.aluracursos.challengeforo.dto.DatosActualizarUsuario;
 import com.aluracursos.challengeforo.dto.DatosRegistroUsuario;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
 
 @Table(name = "usuarios")
-@Entity(name = "Usuario")
+@Entity(name = "usuario")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Usuario {
+public class Usuario implements UserDetails {
+    @Id
     private Long id;
     private String nombre;
     private String email;

@@ -9,18 +9,21 @@ import com.aluracursos.challengeforo.repository.RespuestaRepository;
 import com.aluracursos.challengeforo.repository.TopicoRepository;
 import com.aluracursos.challengeforo.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.awt.print.Pageable;
 import java.net.URI;
 
 @RestController
 @RequestMapping("/respuestas")
 public class RespuestaController {
+
+    @Autowired
     private final RespuestaRepository respuestaRepository;
     private final TopicoRepository topicoRepository;
     private final UsuarioRepository usuarioRepository;
